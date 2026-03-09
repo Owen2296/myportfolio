@@ -313,18 +313,18 @@ const projects = [
   },
   {
     title: 'AI-Powered Contract Compliance Tool',
-    desc: 'Developed an enterprise-grade tool to automate the legal review process for contracts. Implemented an agentic workflow using Azure AI services with GPT-4o-mini on Azure OpenAI. Evaluates legal contracts to identify non-compliant clauses and highlight potential regulatory risks based on predefined legal clauses and aspects, generating comprehensive summaries.',
-    tags: ['Azure OpenAI', 'GPT-4o-mini', 'Legal AI', 'Agentic Workflow'],
+    desc: 'Developed an AI tool to automate the legal review process for contracts. Implemented an automated workflow using Azure AI services with GPT-4o-mini on Azure OpenAI. Evaluates legal contracts to identify non-compliant clauses and highlight potential regulatory risks based on predefined legal clauses and aspects, generating comprehensive summaries.',
+    tags: ['Azure OpenAI', 'GPT-4o-mini', 'Legal AI'],
   },
   {
     title: 'RAG-Based Banking Support System',
     desc: 'Created a system for a banking application to provide real-time, context-aware resolutions to user queries. Leveraged Retrieval-Augmented Generation combined with hybrid searching using BM25 and vector search powered by Azure OpenAI. Improved query resolution accuracy by grounding the LLM in specific banking documentation through semantic search and vector indexing.',
-    tags: ['BM25', 'Vector Search', 'Azure OpenAI', 'RAG', 'Banking'],
+    tags: ['BM25', 'Vector Search', 'Azure OpenAI', 'RAG'],
   },
   {
     title: 'Document Validation Pipeline',
     desc: 'Automated document verification for loan applications to detect discrepancies against compliance data. Developed a pipeline using Azure Document Intelligence to extract key information and perform cross-validation ensuring all fields are aligned. Workflow triggered through Google Cloud Run function to send summarized results and suggested remediation actions using LLM to data users.',
-    tags: ['Azure Document Intelligence', 'Cloud Run', 'LLM', 'Document AI'],
+    tags: ['Azure Document Intelligence', 'Cloud Run', 'LLM'],
   },
   {
     title: 'AI SQL Agent (Text-to-SQL)',
@@ -1021,7 +1021,7 @@ export default function Portfolio() {
             </h1>
 
             <p style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)', color: 'hsl(var(--muted-foreground))', marginBottom: '2.5rem', lineHeight: 1.7, fontWeight: 400 }}>
-              Specialized in NLP, RAG systems, and AI-powered applications. Currently building intelligent solutions that make a difference.
+              Specialized in machine learning and AI-powered applications. Currently building intelligent solutions that make a difference.
             </p>
 
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
@@ -1056,14 +1056,13 @@ export default function Portfolio() {
             <div style={{ display: 'grid', gridTemplateColumns: '7fr 3fr', gap: '3rem' }}>
               <div style={{ fontSize: '1.05rem', color: 'hsl(var(--muted-foreground))', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                 <p>
-                  I'm a Data Scientist and AI Engineer passionate about building intelligent systems. Recently graduated from University Tunku Abdul Rahman (UTAR) with a CGPA of 3.88 with Honours.
+                  I'm a Data Scientist and AI Engineer passionate about building intelligent systems. Recently graduated from University Tunku Abdul Rahman (UTAR).
                 </p>
                 <p>
                   My expertise lies in Natural Language Processing, Large Language Models, and Retrieval-Augmented Generation (RAG) systems. I currently work as an Associate Data Scientist, solving complex business challenges with AI.
                 </p>
                 <p>
-                  When I'm not building AI solutions, I enjoy exploring emerging technologies and staying updated with the latest developments in deep learning.
-                </p>
+                  When I'm not building AI solutions, I enjoy exploring emerging technologies and keeping up with the latest advancements in AI and machine learning.                </p>
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -1071,7 +1070,7 @@ export default function Portfolio() {
                   { icon: MapPin, label: 'LOCATION', value: 'Malaysia' },
                   { icon: Mail, label: 'EMAIL', value: 'owenchin123456@gmail.com', href: 'mailto:owenchin123456@gmail.com' },
                   { icon: Linkedin, label: 'LINKEDIN', value: 'Owen Chin', href: 'https://www.linkedin.com/in/owen-chin-a93735267/' },
-                  { icon: GraduationCap, label: 'EDUCATION', value: 'UTAR — CGPA 3.88 (Hons)' },
+                  { icon: GraduationCap, label: 'EDUCATION', value: 'UTAR - Bachelor of Information Systems (Hons) Digital Economy Technology (CGPA 3.88)' },
                 ].map(({ icon: Icon, label, value, href }) => (
                   <div key={label} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.875rem' }}>
                     <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'hsl(var(--primary) / 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
