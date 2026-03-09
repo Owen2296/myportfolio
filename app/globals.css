@@ -1,26 +1,315 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  /* Warm Slate Light Mode */
+  --background: 220 20% 97%;
+  --foreground: 220 25% 12%;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --card: 220 20% 100%;
+  --card-foreground: 220 25% 12%;
+
+  --popover: 220 20% 100%;
+  --popover-foreground: 220 25% 12%;
+
+  --primary: 217 91% 60%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 220 14% 55%;
+  --secondary-foreground: 0 0% 100%;
+
+  --muted: 220 14% 88%;
+  --muted-foreground: 220 14% 40%;
+
+  --accent: 220 25% 12%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 220 14% 87%;
+  --input: 220 14% 93%;
+  --ring: 217 91% 60%;
+
+  color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Soft Warm Slate Dark Mode — easier on the eyes */
+    --background: 224 20% 14%;
+    /* warm slate, not pure black */
+    --foreground: 220 20% 92%;
+    /* off-white, not pure white */
+
+    --card: 224 20% 18%;
+    /* slightly lighter card surface */
+    --card-foreground: 220 20% 92%;
+
+    --popover: 224 20% 18%;
+    --popover-foreground: 220 20% 92%;
+
+    --primary: 217 91% 65%;
+    /* softer blue */
+    --primary-foreground: 220 25% 10%;
+
+    --secondary: 220 14% 50%;
+    --secondary-foreground: 220 20% 92%;
+
+    --muted: 224 14% 25%;
+    --muted-foreground: 220 14% 65%;
+    /* readable, not too bright */
+
+    --accent: 220 20% 88%;
+    --accent-foreground: 220 25% 12%;
+
+    --border: 224 14% 24%;
+    /* subtle border, not harsh */
+    --input: 224 14% 20%;
+    --ring: 217 91% 65%;
+
+    color-scheme: dark;
   }
 }
 
+/* Base styles */
+* {
+  border-color: hsl(var(--border));
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: radial-gradient(at 0% 0%, hsl(var(--primary) / 0.03) 0, transparent 50%),
+    radial-gradient(at 100% 100%, hsl(var(--primary) / 0.03) 0, transparent 50%),
+    hsl(var(--background));
+  background-size: 150% 150%;
+  animation: backgroundFlow 20s ease infinite;
+}
+
+@keyframes backgroundFlow {
+  0% {
+    background-position: 0% 0%;
+  }
+
+  50% {
+    background-position: 100% 100%;
+  }
+
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+::selection {
+  background-color: hsl(var(--primary) / 0.25);
+  color: hsl(var(--primary));
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary));
+}
+
+/* Container */
+.container {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+@media (min-width: 40rem) {
+  .container {
+    max-width: 40rem;
+  }
+}
+
+@media (min-width: 48rem) {
+  .container {
+    max-width: 48rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .container {
+    max-width: 72rem;
+  }
+}
+
+/* ──────────────────────────────── Timeline ──────────────────────────────── */
+.timeline-line {
+  position: absolute;
+  left: 12px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, hsl(var(--primary)), hsl(var(--primary) / 0.15));
+}
+
+.timeline-dot {
+  position: absolute;
+  left: 4px;
+  top: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: hsl(var(--primary));
+  border: 3px solid hsl(var(--background));
+  box-shadow: 0 0 0 3px hsl(var(--primary) / 0.25);
+  z-index: 2;
+}
+
+.timeline-dot--current {
+  background: hsl(160 65% 55%);
+  box-shadow: 0 0 0 3px hsl(160 65% 55% / 0.25);
+  animation: dot-pulse 2s ease-in-out infinite;
+}
+
+@keyframes dot-pulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 3px hsl(160 65% 55% / 0.25);
+  }
+
+  50% {
+    box-shadow: 0 0 0 6px hsl(160 65% 55% / 0.12), 0 0 12px hsl(160 65% 55% / 0.15);
+  }
+}
+
+/* ──────────────────────────────── Pulse animation ───────────────────────── */
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* ──────────────────────────────── Skill card ────────────────────────────── */
+.skill-card {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 1rem;
+  padding: 1.5rem;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  height: 100%;
+}
+
+.skill-card:hover {
+  border-color: hsl(var(--primary) / 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px hsl(var(--primary) / 0.1);
+}
+
+.skill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  background: hsl(var(--primary) / 0.12);
+  color: hsl(var(--primary));
+  font-size: 0.8125rem;
+  font-weight: 500;
+  transition: background 0.15s;
+}
+
+.skill-tag:hover {
+  background: hsl(var(--primary) / 0.22);
+}
+
+/* ──────────────────────────────── Cert card ─────────────────────────────── */
+.cert-card {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.875rem;
+  padding: 1.25rem 1.5rem;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.cert-card:hover {
+  border-color: hsl(var(--primary) / 0.45);
+  box-shadow: 0 4px 20px hsl(var(--primary) / 0.08);
+  transform: translateY(-2px);
+}
+
+/* ──────────────────────────────── Contact link cards ────────────────────── */
+.contact-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.75rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: hsl(var(--primary) / 0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: hsl(var(--foreground));
+  border: 1px solid hsl(var(--primary) / 0.2);
+  text-decoration: none;
+  box-shadow: 0 4px 15px hsl(var(--primary) / 0.05);
+}
+
+.contact-card:hover {
+  background: hsl(var(--primary) / 0.15);
+  border-color: hsl(var(--primary) / 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px hsl(var(--primary) / 0.12);
+}
+
+.contact-card svg {
+  color: hsl(var(--primary));
+  flex-shrink: 0;
+}
+
+/* ──────────────────────────────── Responsive grids ──────────────────────── */
+@media (max-width: 48rem) {
+  .skills-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr !important;
+  }
 }
