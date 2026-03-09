@@ -868,7 +868,7 @@ function ClusteringGame() {
 
       <div style={{ marginTop: '1.5rem', padding: '0 0.5rem' }}>
         <p style={{ fontSize: '0.875rem', color: 'hsl(var(--muted-foreground))', lineHeight: 1.6 }}>
-          <strong>How it works:</strong> Click <em>New Random Dataset</em> to generate points. Watch the <strong>K-Means</strong> algorithm iteratively refine cluster centroids until it converges. The regions show the mathematical decision boundaries for each cluster.
+          <strong>How it works:</strong> Adjust the sliders to generate points. Click <em>Start Simulation</em> and watch the <strong>K-Means</strong> algorithm iteratively refine cluster centroids until it converges. The regions show the mathematical decision boundaries for each cluster.
         </p>
       </div>
     </div>
