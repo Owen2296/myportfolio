@@ -222,6 +222,19 @@ h6 {
   }
 }
 
+/* ──────────────────────────────── Cursor blink animation ──────────────────── */
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
 /* ──────────────────────────────── Skill card ────────────────────────────── */
 .skill-card {
   background: hsl(var(--card));

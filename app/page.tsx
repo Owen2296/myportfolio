@@ -16,6 +16,13 @@ import {
   MapPin,
   GraduationCap,
   Calendar,
+  Play,
+  Pause,
+  RotateCcw,
+  RefreshCw,
+  Plus,
+  Trash2,
+  Settings2,
 } from 'lucide-react';
 
 /* ─── Cloud Provider SVG Icons ──────────────────────────────────────────── */
@@ -157,7 +164,7 @@ function BackgroundDecor() {
           width: '45vw',
           height: '45vw',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, hsl(270 70% 65% / 0.08) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, hsl(4 82% 57% / 0.08) 0%, transparent 70%)',
           filter: 'blur(90px)',
         }}
       />
@@ -180,7 +187,7 @@ function BackgroundDecor() {
           width: '35vw',
           height: '35vw',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, hsl(160 65% 55% / 0.05) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, hsl(134 61% 41% / 0.05) 0%, transparent 70%)',
           filter: 'blur(100px)',
         }}
       />
@@ -197,7 +204,7 @@ const experiences = [
     desc: 'Applying advanced data science methodologies to deliver AI-powered solutions. Solving complex enterprise challenges using machine learning and GenAI technologies.',
     tags: ['GenAI', 'Machine Learning', 'LLM'],
     current: true,
-    color: 'hsl(12 85% 55%)', // Red Orange
+    color: 'hsl(4 82% 57%)', // Red
   },
   {
     role: 'Industrial Trainee (AI & Data)',
@@ -206,7 +213,7 @@ const experiences = [
     desc: 'Gained practical experience in AI and data consulting. Contributed to enterprise technology implementation projects for major clients across various industries.',
     tags: ['AI Consulting', 'Data Analysis', 'NLP'],
     current: false,
-    color: 'hsl(50 100% 45%)', // Yellow
+    color: 'hsl(45 97% 52%)', // Yellow
   },
 ];
 
@@ -214,29 +221,29 @@ const skillGroups = [
   {
     title: 'Programming',
     icon: Code2,
-    color: 'hsl(217 91% 65%)',
-    bg: 'hsl(217 91% 65% / 0.1)',
+    color: 'hsl(217 89% 61%)',
+    bg: 'hsl(217 89% 61% / 0.1)',
     skills: ['Python', 'SQL', 'JavaScript', 'TypeScript'],
   },
   {
     title: 'Cloud & Tools',
     icon: Cloud,
-    color: 'hsl(35 90% 60%)',
-    bg: 'hsl(35 90% 60% / 0.1)',
+    color: 'hsl(45 97% 52%)',
+    bg: 'hsl(45 97% 52% / 0.1)',
     skills: ['Azure', 'GCP', 'AWS', 'Git', 'Power BI', 'Docker'],
   },
   {
     title: 'Frameworks & Libraries',
     icon: Layers,
-    color: 'hsl(160 65% 50%)',
-    bg: 'hsl(160 65% 50% / 0.1)',
+    color: 'hsl(134 61% 41%)',
+    bg: 'hsl(134 61% 41% / 0.1)',
     skills: ['React JS', 'FastAPI', 'Pandas', 'NumPy', 'Scikit-Learn', 'TensorFlow'],
   },
   {
     title: 'AI & Machine Learning',
     icon: Brain,
-    color: 'hsl(270 70% 65%)',
-    bg: 'hsl(270 70% 65% / 0.1)',
+    color: 'hsl(4 82% 57%)',
+    bg: 'hsl(4 82% 57% / 0.1)',
     skills: ['NLP', 'Machine Learning', 'Transformer Models', 'RAG', 'GenAI', 'Prompt Engineering'],
   },
 
@@ -361,14 +368,560 @@ const certGroups = [
   },
 ];
 
+/* ─── Clustering Algorithm & Visualization ─────────────────────────────────── */
+interface Point {
+  x: number;
+  y: number;
+  cluster?: number;
+}
+
+interface Centroid {
+  x: number;
+  y: number;
+  cluster: number;
+}
+
+interface ClusteringState {
+  points: Point[];
+  centroids: Centroid[];
+  iteration: number;
+}
+
+function kMeansClusteringSteps(
+  points: Point[],
+  k: number,
+  maxIterations: number = 20
+): ClusteringState[] {
+  if (k <= 0 || k > points.length) {
+    return [{ points, centroids: [], iteration: 0 }];
+  }
+
+  const states: ClusteringState[] = [];
+
+  // Initialize centroids randomly
+  let centroids: Centroid[] = [];
+  const usedIndices = new Set<number>();
+  for (let i = 0; i < k; i++) {
+    let randomIdx;
+    do {
+      randomIdx = Math.floor(Math.random() * points.length);
+    } while (usedIndices.has(randomIdx));
+    usedIndices.add(randomIdx);
+
+    const p = points[randomIdx];
+    centroids.push({ x: p.x, y: p.y, cluster: i });
+  }
+
+  let currentPoints = [...points];
+
+  // Add initial state with no cluster assignments
+  states.push({
+    points: points.map((p) => ({ ...p, cluster: undefined })),
+    centroids: centroids.map((c) => ({ ...c })),
+    iteration: 0,
+  });
+
+  for (let iter = 0; iter < maxIterations; iter++) {
+    // Assign points to nearest centroid
+    currentPoints = currentPoints.map((p) => {
+      let minDist = Infinity;
+      let closestCluster = 0;
+
+      for (let i = 0; i < centroids.length; i++) {
+        const dist = Math.sqrt(
+          (p.x - centroids[i].x) ** 2 + (p.y - centroids[i].y) ** 2
+        );
+        if (dist < minDist) {
+          minDist = dist;
+          closestCluster = i;
+        }
+      }
+
+      return { ...p, cluster: closestCluster };
+    });
+
+    states.push({
+      points: [...currentPoints],
+      centroids: centroids.map((c) => ({ ...c })),
+      iteration: iter + 1,
+    });
+
+    // Calculate new centroids
+    const newCentroids: Centroid[] = [];
+    for (let i = 0; i < k; i++) {
+      const clusterPoints = currentPoints.filter((p) => p.cluster === i);
+      if (clusterPoints.length > 0) {
+        const avgX = clusterPoints.reduce((sum, p) => sum + p.x, 0) / clusterPoints.length;
+        const avgY = clusterPoints.reduce((sum, p) => sum + p.y, 0) / clusterPoints.length;
+        newCentroids.push({ x: avgX, y: avgY, cluster: i });
+      } else {
+        newCentroids.push(centroids[i]);
+      }
+    }
+
+    // Check convergence
+    let converged = true;
+    for (let i = 0; i < centroids.length; i++) {
+      const threshold = 0.1;
+      if (
+        Math.abs(centroids[i].x - newCentroids[i].x) >= threshold ||
+        Math.abs(centroids[i].y - newCentroids[i].y) >= threshold
+      ) {
+        converged = false;
+        break;
+      }
+    }
+
+    centroids = newCentroids;
+
+    if (converged) break;
+  }
+
+  return states.length > 0 ? states : [{ points: currentPoints, centroids, iteration: 0 }];
+}
+
+const clusterColors = [
+  '#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6',
+  '#ec4899', '#14b8a6', '#f97316', '#6366f1', '#06b6d4',
+];
+
+// Helper to interpolate between two hex colors for a smoother transition
+const interpolateHex = (hex1: string, hex2: string, factor: number): string => {
+  const r1 = parseInt(hex1.substring(1, 3), 16);
+  const g1 = parseInt(hex1.substring(3, 5), 16);
+  const b1 = parseInt(hex1.substring(5, 7), 16);
+
+  const r2 = parseInt(hex2.substring(1, 3), 16);
+  const g2 = parseInt(hex2.substring(3, 5), 16);
+  const b2 = parseInt(hex2.substring(5, 7), 16);
+
+  const r = Math.round(r1 + (r2 - r1) * factor);
+  const g = Math.round(g1 + (g2 - g1) * factor);
+  const b = Math.round(b1 + (b2 - b1) * factor);
+
+  const toHex = (c: number) => c.toString(16).padStart(2, '0');
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+};
+
+function ClusteringGame() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [k, setK] = useState(4);
+  const [numPoints, setNumPoints] = useState(60);
+  const [maxIter, setMaxIter] = useState(15);
+  const [points, setPoints] = useState<Point[]>([]);
+  const [states, setStates] = useState<ClusteringState[]>([]);
+  const [currentFrame, setCurrentFrame] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [showVoronoi, setShowVoronoi] = useState(true);
+
+  // Generate random points
+  const generatePoints = (pCount?: number, kVal?: number) => {
+    const count = pCount ?? numPoints;
+    const kv = kVal ?? k;
+    
+    const CANVAS_WIDTH = 1000;
+    const CANVAS_HEIGHT = 400;
+    const POINT_RADIUS = 3;
+    const PADDING = POINT_RADIUS + 5;
+
+    const newPoints: Point[] = [];
+    // More structured random generation (clusters)
+    const centers = Array.from({ length: 5 }, () => ({
+      x: Math.random() * CANVAS_WIDTH,
+      y: Math.random() * CANVAS_HEIGHT,
+    }));
+
+    for (let i = 0; i < count; i++) {
+      const center = centers[Math.floor(Math.random() * centers.length)];
+      newPoints.push({
+        x: Math.max(PADDING, Math.min(CANVAS_WIDTH - PADDING, center.x + (Math.random() - 0.5) * 200)),
+        y: Math.max(PADDING, Math.min(CANVAS_HEIGHT - PADDING, center.y + (Math.random() - 0.5) * 150)),
+      });
+    }
+    setPoints(newPoints);
+
+    const clusteringStates = kMeansClusteringSteps(newPoints, kv, maxIter);
+    setStates(clusteringStates);
+    setCurrentFrame(0);
+  };
+
+  const computeStates = (pSource: Point[]) => {
+    const clusteringStates = kMeansClusteringSteps(pSource, k, maxIter);
+    setStates(clusteringStates);
+    setCurrentFrame(0);
+  };
+
+
+  // Re-run clustering if maxIter changes without changing points
+  useEffect(() => {
+    if (points.length > 0) {
+      const clusteringStates = kMeansClusteringSteps(points, k, maxIter);
+      setStates(clusteringStates);
+      setCurrentFrame(0);
+    }
+  }, [maxIter]);
+
+  // Initial generation
+  useEffect(() => {
+    generatePoints();
+  }, []);
+
+  // Animation loop
+  useEffect(() => {
+    if (!isPlaying || states.length === 0) return;
+
+    const timer = setTimeout(() => {
+      setCurrentFrame((f) => {
+        if (f >= states.length - 1) {
+          setIsPlaying(false);
+          return f;
+        }
+        return f + 1;
+      });
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [currentFrame, isPlaying, states.length]);
+
+  // Draw canvas
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || states.length === 0) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Clear and background
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Subtle Grid
+    ctx.strokeStyle = 'rgba(128, 128, 128, 0.08)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= canvas.width; i += 40) {
+      ctx.beginPath();
+      ctx.moveTo(i, 0);
+      ctx.lineTo(i, canvas.height);
+      ctx.stroke();
+    }
+    for (let i = 0; i <= canvas.height; i += 40) {
+      ctx.beginPath();
+      ctx.moveTo(0, i);
+      ctx.lineTo(canvas.width, i);
+      ctx.stroke();
+    }
+
+    const state = states[currentFrame];
+    if (!state) return;
+
+    const baseGrey = '#94a3b8'; // Matching muted foreground aesthetic
+    const progressFactor = states.length > 1 ? currentFrame / (states.length - 1) : 1;
+
+    // Optional: Draw regions (Voronoi-ish)
+    if (showVoronoi) {
+      // Simplified Voronoi by scanning a low-res grid
+      const gridSize = 10;
+      for (let x = 0; x < canvas.width; x += gridSize) {
+        for (let y = 0; y < canvas.height; y += gridSize) {
+          let minDist = Infinity;
+          let closestCluster = 0;
+          state.centroids.forEach((c) => {
+            const dist = Math.sqrt((x - c.x) ** 2 + (y - c.y) ** 2);
+            if (dist < minDist) {
+              minDist = dist;
+              closestCluster = c.cluster;
+            }
+          });
+          const alpha = Math.round(17 * progressFactor).toString(16).padStart(2, '0');
+          ctx.fillStyle = `${clusterColors[closestCluster % clusterColors.length]}${alpha}`;
+          ctx.fillRect(x, y, gridSize, gridSize);
+        }
+      }
+    }
+
+    // Draw points
+    state.points.forEach((p) => {
+      let color = baseGrey;
+      if (p.cluster !== undefined) {
+        const targetColor = clusterColors[p.cluster % clusterColors.length];
+        color = interpolateHex(baseGrey, targetColor, progressFactor);
+      }
+
+      ctx.fillStyle = color;
+
+      // Glow effect for points assigned to clusters
+      if (p.cluster !== undefined) {
+        ctx.shadowBlur = 4 * progressFactor;
+        ctx.shadowColor = color;
+      } else {
+        ctx.shadowBlur = 0;
+      }
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Reset shadow
+      ctx.shadowBlur = 0;
+    });
+
+    // Draw centroids
+    state.centroids.forEach((c) => {
+      const color = clusterColors[c.cluster % clusterColors.length];
+
+      // Outer ring
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(c.x, c.y, 14, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Pulsing effect
+      const pulseScale = 1 + Math.sin(Date.now() / 200) * 0.1;
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(c.x, c.y, 8 * pulseScale, 0, Math.PI * 2);
+      ctx.fill();
+
+      // White dot in center
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(c.x, c.y, 2, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    // If animating, keep re-drawing the pulse
+    if (state.centroids.length > 0) {
+      const animationReq = requestAnimationFrame(() => {
+        // No-op purely to trigger re-render for pulsing
+        // Actually, better to use a dedicated pulse state or just useEffect dependency
+      });
+      // To simplify, we'll only pulse if currentFrame isn't changing too fast
+      // or just accept it's static if not playing.
+    }
+  }, [states, currentFrame, showVoronoi]);
+
+  const togglePlay = () => {
+    if (currentFrame >= states.length - 1) {
+      setCurrentFrame(0);
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  return (
+    <div style={{ width: '100%', maxWidth: '800px', margin: '0 auto' }}>
+      <div style={{
+        background: 'hsl(var(--card))',
+        border: '1px solid hsl(var(--border))',
+        borderRadius: '1.25rem',
+        padding: '1.5rem',
+        boxShadow: '0 10px 40px -10px rgba(0,0,0,0.1)',
+        position: 'relative'
+      }}>
+        <div style={{ position: 'relative', overflow: 'hidden', borderRadius: '0.75rem', background: 'hsl(var(--muted) / 0.2)', marginBottom: '1.5rem' }}>
+          <canvas
+            ref={canvasRef}
+            width={1000}
+            height={400}
+            style={{
+              width: '100%',
+              height: 'auto',
+              display: 'block',
+            }}
+          />
+          <div style={{
+            position: 'absolute',
+            top: '1rem',
+            right: '1rem',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.5rem'
+          }}>
+            <div style={{
+              background: 'hsl(var(--background) / 0.8)',
+              backdropFilter: 'blur(8px)',
+              padding: '0.5rem 0.8rem',
+              borderRadius: '99px',
+              border: '1px solid hsl(var(--border))',
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem'
+            }}>
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: isPlaying ?  '#f59e0b':'#10b981' }} />
+              {isPlaying ? 'Animating' : (currentFrame === states.length - 1 ? 'Converged' : 'Paused')}
+            </div>
+          </div>
+
+          {points.length === 0 && (
+            <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <p style={{ color: 'hsl(var(--muted-foreground))', fontSize: '0.9rem' }}>Click to add points or generate random ones</p>
+            </div>
+          )}
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '2rem', marginBottom: '2rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'hsl(var(--muted-foreground))' }}>Number of clusters (k)</label>
+                <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'hsl(var(--primary))' }}>{k}</span>
+              </div>
+              <input
+                type="range"
+                min="2"
+                max="8"
+                value={k}
+                onChange={(e) => {
+                  const val = Number(e.target.value);
+                  setK(val);
+                  generatePoints(numPoints, val);
+                }}
+                style={{ width: '100%', accentColor: 'hsl(var(--primary))' }}
+              />
+            </div>
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'hsl(var(--muted-foreground))' }}>Points count</label>
+                <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'hsl(var(--primary))' }}>{points.length}</span>
+              </div>
+              <input
+                type="range"
+                min="20"
+                max="500"
+                step="5"
+                value={numPoints}
+                onChange={(e) => {
+                  const val = Number(e.target.value);
+                  setNumPoints(val);
+                  generatePoints(val, k);
+                }}
+                style={{ width: '100%', accentColor: 'hsl(var(--primary))' }}
+              />
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem', justifyContent: 'center' }}>
+            <button
+              onClick={togglePlay}
+              style={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.5rem',
+                padding: '0.9rem',
+                background: isPlaying ? 'hsl(var(--muted))' : 'hsl(var(--primary))',
+                color: isPlaying ? 'hsl(var(--muted-foreground))' : 'hsl(var(--primary-foreground))',
+                border: 'none',
+                borderRadius: '0.75rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                boxShadow: isPlaying ? 'none' : '0 4px 12px hsl(var(--primary) / 0.15)',
+              }}
+            >
+              {isPlaying ? <Pause size={18} /> : <Play size={18} />}
+              {isPlaying ? 'Pause' : 'Start Simulation'}
+            </button>
+            <p style={{ fontSize: '0.75rem', color: 'hsl(var(--muted-foreground))', textAlign: 'center', margin: 0, fontWeight: 500 }}>
+              Adjust sliders to reset data
+            </p>
+          </div>
+        </div>
+
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '1rem',
+          background: 'hsl(var(--muted) / 0.15)',
+          borderRadius: '0.75rem',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div style={{ fontSize: '0.85rem', color: 'hsl(var(--muted-foreground))' }}>
+              Step <span style={{ fontWeight: 700, color: 'hsl(var(--foreground))' }}>{currentFrame + 1}</span> of {states.length}
+            </div>
+            <div style={{ width: '100px', height: '4px', background: 'hsl(var(--border))', borderRadius: '2px', overflow: 'hidden' }}>
+              <div style={{
+                width: `${((currentFrame + 1) / states.length) * 100}%`,
+                height: '100%',
+                background: 'hsl(var(--primary))',
+                transition: 'width 0.3s ease-out'
+              }} />
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.8rem', color: 'hsl(var(--muted-foreground))' }}>
+              <input
+                type="checkbox"
+                checked={showVoronoi}
+                onChange={(e) => setShowVoronoi(e.target.checked)}
+                style={{ accentColor: 'hsl(var(--primary))' }}
+              />
+              Show Influence Regions
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ marginTop: '1.5rem', padding: '0 0.5rem' }}>
+        <p style={{ fontSize: '0.875rem', color: 'hsl(var(--muted-foreground))', lineHeight: 1.6 }}>
+          <strong>How it works:</strong> Click <em>New Random Dataset</em> to generate points. Watch the <strong>K-Means</strong> algorithm iteratively refine cluster centroids until it converges. The regions show the mathematical decision boundaries for each cluster.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 /* ─── Component ─────────────────────────────────────────────────────────── */
 export default function Portfolio() {
   const [scrolled, setScrolled] = useState(false);
+  const [displayText, setDisplayText] = useState('');
+  const [displayGradientText, setDisplayGradientText] = useState('');
+  const [isTypingComplete, setIsTypingComplete] = useState(false);
+
+  const fullText = "Hi, I'm Owen Chin!";
+  const gradientText = "Data Scientist /\nAI Engineer";
+  const typingSpeed = 100; // milliseconds per character
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Typing animation effect
+  useEffect(() => {
+    let charIndex = 0;
+    let gradientIndex = 0;
+    let isTypingFirstText = true;
+
+    const typeInterval = setInterval(() => {
+      if (isTypingFirstText) {
+        if (charIndex < fullText.length) {
+          setDisplayText(fullText.slice(0, charIndex + 1));
+          charIndex++;
+        } else {
+          isTypingFirstText = false;
+          // Small delay before starting the gradient text
+          setTimeout(() => {
+            typeInterval; // Keep interval running for gradient text
+          }, 200);
+        }
+      } else {
+        if (gradientIndex < gradientText.length) {
+          setDisplayGradientText(gradientText.slice(0, gradientIndex + 1));
+          gradientIndex++;
+        } else {
+          setIsTypingComplete(true);
+          clearInterval(typeInterval);
+        }
+      }
+    }, typingSpeed);
+
+    return () => clearInterval(typeInterval);
   }, []);
 
   const scrollTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -386,6 +939,7 @@ export default function Portfolio() {
     { name: 'Skills', href: '#skills' },
     { name: 'Projects', href: '#projects' },
     { name: 'Certifications', href: '#certifications' },
+    { name: 'Try It Out', href: '#clustering-game' },
     { name: 'Contact', href: '#contact' },
   ];
 
@@ -455,14 +1009,18 @@ export default function Portfolio() {
             </motion.div>
 
             <h1 style={{ fontSize: 'clamp(2.8rem, 6vw, 5.5rem)', fontWeight: 700, lineHeight: 1.1, letterSpacing: '-0.03em', marginBottom: '1.5rem', color: 'hsl(var(--foreground))' }}>
-              Hi, I'm Owen Chin!<br />{' '}
-              <span style={{ background: 'linear-gradient(135deg, hsl(217 91% 65%), hsl(270 70% 65%))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                Data Scientist /<br />AI Engineer
-              </span>
-              
+              {displayText}
+              {displayText.length > 0 && displayText.length < fullText.length && <span style={{ animation: 'blink 0.7s infinite', marginLeft: '0.1em' }}>|</span>}
+              {displayText === fullText && <><br />{' '}</>}
+              {displayText === fullText && (
+                <span style={{ background: 'linear-gradient(135deg,hsl(217 89% 61%), /* blue */hsl(134 61% 41%), /* green */hsl(45 97% 52%),  /* yellow */hsl(4 82% 57%)    /* red */)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                  {displayGradientText}
+                  {displayGradientText.length > 0 && displayGradientText.length < gradientText.length && <span style={{ animation: 'blink 0.7s infinite', marginLeft: '0.1em' }}>|</span>}
+                </span>
+              )}
             </h1>
 
-            <p style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)', color: 'hsl(var(--muted-foreground))', maxWidth: '42rem', marginBottom: '2.5rem', lineHeight: 1.7, fontWeight: 400 }}>
+            <p style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)', color: 'hsl(var(--muted-foreground))', marginBottom: '2.5rem', lineHeight: 1.7, fontWeight: 400 }}>
               Specialized in NLP, RAG systems, and AI-powered applications. Currently building intelligent solutions that make a difference.
             </p>
 
@@ -812,6 +1370,21 @@ export default function Portfolio() {
                 </FadeSection>
               ))}
             </div>
+          </FadeSection>
+        </div>
+      </section>
+
+      {/* ── Clustering Game ───────────────────────────────────────────── */}
+      <section id="clustering-game" style={{ padding: '6rem 0', position: 'relative' }}>
+        <div className="container mx-auto px-6 md:px-12">
+          <FadeSection>
+            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', fontWeight: 700, marginBottom: '1rem', color: 'hsl(var(--foreground))' }}>
+              Try It Out !!!
+            </h2>
+            <p style={{ fontSize: '0.95rem', color: 'hsl(var(--muted-foreground))', marginBottom: '3.5rem', lineHeight: 1.7 }}>
+              Experience machine learning in action. Adjust the <strong>Number of clusters</strong> or <strong>Points count</strong> to automatically generate new patterns and watch how the K-Means algorithm identifies clusters in real-time.
+            </p>
+            <ClusteringGame />
           </FadeSection>
         </div>
       </section>
