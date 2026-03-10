@@ -353,7 +353,7 @@ const certGroups = [
   {
     provider: 'Google Cloud',
     icon: GcpIcon,
-    accent: '#4285F4',
+    accent: '#ea4335',
     certs: [
       { name: 'Professional Cloud Architect', credentialUrl: 'https://www.credly.com/badges/b17169ba-3fba-48ff-b333-cf99b7bfaa6c/linked_in_profile' }
     ],
@@ -882,8 +882,8 @@ export default function Portfolio() {
   const [displayGradientText, setDisplayGradientText] = useState('');
   const [isTypingComplete, setIsTypingComplete] = useState(false);
 
-  const fullText = "Hi, I'm Owen Chin!";
-  const gradientText = "Data Scientist /\nAI Engineer";
+  const fullText = "Hi, I'm Owen!";
+  const gradientText = "Data Scientist | AI Engineer <br>";
   const typingSpeed = 100; // milliseconds per character
 
   useEffect(() => {
@@ -964,7 +964,7 @@ export default function Portfolio() {
           borderBottom: scrolled ? '1px solid hsl(var(--border))' : '1px solid transparent',
         }}
       >
-        <div className="container mx-auto px-6 md:px-12" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '64px' }}>
+        <div className="container mx-auto px-6 md:px-12" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '64px',marginTop: '0.4rem'}}>
           <a
             href="#"
             onClick={(e) => scrollTo(e, '#top')}
