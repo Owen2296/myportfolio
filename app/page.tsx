@@ -518,7 +518,7 @@ function ClusteringGame() {
   const generatePoints = (pCount?: number, kVal?: number) => {
     const count = pCount ?? numPoints;
     const kv = kVal ?? k;
-    
+
     const CANVAS_WIDTH = 1000;
     const CANVAS_HEIGHT = 400;
     const POINT_RADIUS = 3;
@@ -748,7 +748,7 @@ function ClusteringGame() {
               alignItems: 'center',
               gap: '0.5rem'
             }}>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: isPlaying ?  '#f59e0b':'#10b981' }} />
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: isPlaying ? '#f59e0b' : '#10b981' }} />
               {isPlaying ? 'Animating' : (currentFrame === states.length - 1 ? 'Converged' : 'Paused')}
             </div>
           </div>
