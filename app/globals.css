@@ -145,6 +145,14 @@ html {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+html[data-theme-transitioning] {
+  transition: none;
+}
+
+html[data-theme-transitioning] * {
+  transition: none !important;
+}
+
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   background-color: hsl(var(--background));
@@ -156,6 +164,10 @@ body {
     hsl(var(--background));
   background-size: 150% 150%;
   animation: backgroundFlow 20s ease infinite;
+}
+
+html[data-theme-transitioning] body {
+  animation-play-state: paused;
 }
 
 @keyframes backgroundFlow {
@@ -274,19 +286,6 @@ h6 {
   }
 }
 
-/* ──────────────────────────────── Pulse animation ───────────────────────── */
-@keyframes pulse {
-
-  0%,
-  100% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0.4;
-  }
-}
-
 /* ──────────────────────────────── Cursor blink animation ──────────────────── */
 @keyframes blink {
 
@@ -332,24 +331,6 @@ h6 {
 
 .skill-tag:hover {
   background: hsl(var(--primary) / 0.22);
-}
-
-/* ──────────────────────────────── Cert card ─────────────────────────────── */
-.cert-card {
-  background: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
-  border-radius: 0.875rem;
-  padding: 1.25rem 1.5rem;
-  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-}
-
-.cert-card:hover {
-  border-color: hsl(var(--primary) / 0.45);
-  box-shadow: 0 4px 20px hsl(var(--primary) / 0.08);
-  transform: translateY(-2px);
 }
 
 /* ──────────────────────────────── Contact link cards ────────────────────── */

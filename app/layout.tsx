@@ -16,7 +16,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Owen Chin - Data Scientist & AI Engineer",
-  description: "Associate Data Scientist at Kyndryl specializing in NLP, RAG systems, and AI-powered applications.",
+  description:
+    "Associate Data Scientist at Kyndryl specializing in NLP, RAG systems, and AI-powered applications.",
 };
 
 export default function RootLayout({
@@ -40,4 +41,3 @@ export default function RootLayout({
     </html>
   );
 }
-
