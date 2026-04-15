@@ -340,30 +340,47 @@ const projects = [
 
 const certGroups = [
   {
-    provider: 'Microsoft Azure',
+    provider: "Microsoft Azure",
     icon: AzureIcon,
-    accent: '#0078D4',
+    accent: "#0078D4",
     certs: [
-      { name: 'Azure AI Engineer Associate', credentialUrl: 'https://learn.microsoft.com/api/credentials/share/en-gb/OwenChin-2251/A60AAABE277FA961?sharingId=AEF00A621B18974C' },
-      { name: 'Azure Fundamentals', credentialUrl: '' },
-      { name: 'Azure Data Fundamentals', credentialUrl: '' },
-      { name: 'Azure AI Fundamentals', credentialUrl: '' },
+      {
+        name: "Azure AI Engineer Associate",
+        credentialUrl:
+          "https://learn.microsoft.com/api/credentials/share/en-gb/OwenChin-2251/A60AAABE277FA961?sharingId=AEF00A621B18974C",
+      },
+      { name: "Azure Fundamentals", credentialUrl: "" },
+      { name: "Azure Data Fundamentals", credentialUrl: "" },
+      { name: "Azure AI Fundamentals", credentialUrl: "" },
     ],
   },
   {
-    provider: 'Google Cloud',
+    provider: "Google Cloud",
     icon: GcpIcon,
-    accent: '#ea4335',
+    accent: "#ea4335",
     certs: [
-      { name: 'Professional Cloud Architect', credentialUrl: 'https://www.credly.com/badges/b17169ba-3fba-48ff-b333-cf99b7bfaa6c/linked_in_profile' }
+      {
+        name: "Professional Cloud Architect",
+        credentialUrl:
+          "https://www.credly.com/badges/b17169ba-3fba-48ff-b333-cf99b7bfaa6c/public_url",
+      },
+      {
+        name: "Professional Machine Learning Engineer",
+        credentialUrl:
+          "https://www.credly.com/badges/d508bcad-c610-4ce1-8306-f8efd5e7bed2/public_url",
+      },
     ],
   },
   {
-    provider: 'AWS',
+    provider: "AWS",
     icon: AwsIcon,
-    accent: '#FF9900',
+    accent: "#FF9900",
     certs: [
-      { name: 'Machine Learning Engineer – Associate', credentialUrl: 'https://www.credly.com/badges/b96b3109-0a9a-460b-88a4-882bb38c21a1/linked_in_profile' }
+      {
+        name: "Machine Learning Engineer – Associate",
+        credentialUrl:
+          "https://www.credly.com/badges/b96b3109-0a9a-460b-88a4-882bb38c21a1/public_url",
+      },
     ],
   },
 ];
