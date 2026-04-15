@@ -6,6 +6,7 @@ import {
   Mail,
   Linkedin,
   ArrowRight,
+  Download,
   Code2,
   Brain,
   Layers,
@@ -956,7 +957,7 @@ export default function Portfolio() {
     { name: 'Skills', href: '#skills' },
     { name: 'Projects', href: '#projects' },
     { name: 'Certifications', href: '#certifications' },
-    { name: 'Try It Out', href: '#clustering-game' },
+    //{ name: 'Try It Out', href: '#clustering-game' },
     { name: 'Contact', href: '#contact' },
   ];
 
@@ -1050,6 +1051,15 @@ export default function Portfolio() {
                 onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
               >
                 View My Projects <ArrowRight size={16} />
+              </a>
+              <a
+                href="/owenchin.pdf"
+                download="owenchin-resume.pdf"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '0.625rem', padding: '0.75rem 1.75rem', background: 'transparent', color: 'hsl(var(--foreground))', borderRadius: '9999px', fontWeight: 500, fontSize: '0.9rem', textDecoration: 'none', border: '1px solid hsl(var(--border))', transition: 'border-color 0.2s' }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'hsl(var(--primary) / 0.6)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'hsl(var(--border))'; }}
+              >
+                <Download size={16} /> Download Resume
               </a>
               <a
                 href="mailto:owenchin123456@gmail.com"
@@ -1390,7 +1400,7 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* ── Clustering Game ───────────────────────────────────────────── */}
+      {/* ── Clustering Game ─────────────────────────────────────────────
       <section id="clustering-game" style={{ padding: '6rem 0', position: 'relative' }}>
         <div className="container mx-auto px-6 md:px-12">
           <FadeSection>
@@ -1403,7 +1413,7 @@ export default function Portfolio() {
             <ClusteringGame />
           </FadeSection>
         </div>
-      </section>
+      </section> */}
 
       {/* ── Contact ───────────────────────────────────────────────────── */}
       <section id="contact" style={{ padding: '6rem 0 4rem', position: 'relative' }}>
